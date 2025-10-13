@@ -69,7 +69,6 @@ int ackermann(int m, int n) {
         } else {
             // 當 m > 0 且 n > 0 時，計算 A(m-1, A(m, n-1))
             n = n - 1;
-            // 嵌套循環模擬遞迴，直到找到最底層的返回值
             int temp = m;
             m = m - 1;
             n = n + 1;
