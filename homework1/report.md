@@ -27,7 +27,30 @@
 
   當 m = 4 時，空間複雜度特性無法計算。
 
-## 測試與驗證
+## 程式實作
+
+### 程式碼
+
+```cpp
+#include <iostream>
+using namespace std;
+unsigned long long ack(unsigned int m, unsigned int n) {
+    if (m == 0)
+        return n + 1;
+    else if (n == 0)
+        return ack(m - 1, 1);
+    else
+        return ack(m - 1, ack(m, n - 1));
+}
+int main() {
+    unsigned int m, n;
+    cout << "½Ð¿é¤J m »P n: ";
+    cin >> m >> n;
+    cout << "Ackermann(" << m << ", " << n << ") = " << ack(m, n) << endl;
+    return 0;
+}
+```
+
 
 ### 範例測試
 
@@ -38,7 +61,7 @@
 | 3 | 6 | 509 |
 | 4 | 1 | 無法執行 |
 
-## 申論及心得
+## 申論及開發報告
 
 ### 遞迴極限
 
