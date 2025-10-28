@@ -21,18 +21,18 @@ using namespace std;
 
 class Polynomial;
 
-struct Term { // ✅ 改成 struct，public 成員可直接使用
+struct Term { 
     int exp;   // 指數
     float coef; // 係數
 };
 
 class Polynomial {
 private:
-    vector<Term> termArray; // 用 vector 取代手動配置陣列
+    vector<Term> termArray;
 
 public:
-    Polynomial() = default; // 預設建構子
-    ~Polynomial() = default; // vector 自動管理記憶體
+    Polynomial() = default; 
+    ~Polynomial() = default; 
 
     Polynomial Add(const Polynomial& b) const;   // 加法
     Polynomial Mult(const Polynomial& b) const;  // 乘法
@@ -42,10 +42,8 @@ public:
     friend istream& operator>>(istream& input, Polynomial& Poly);
     friend ostream& operator<<(ostream& output, const Polynomial& Poly);
 };
-
-// ---------------- 輸入與輸出 ----------------
 istream& operator>>(istream& is, Polynomial& poly) {
-    poly.termArray.clear(); // 先清空舊資料
+    poly.termArray.clear();
     int n;
     is >> n;
     for (int i = 0; i < n; ++i) {
@@ -68,7 +66,6 @@ ostream& operator<<(ostream& os, const Polynomial& poly) {
         if (i > 0 && term.coef >= 0)
             os << " + ";
 
-        // 判斷是否為整數係數
         if (floor(term.coef) == term.coef)
             os << (int)term.coef;
         else
@@ -79,11 +76,10 @@ ostream& operator<<(ostream& os, const Polynomial& poly) {
     return os;
 }
 
-// ---------------- 插入新項 ----------------
 void Polynomial::newTerm(float coef, int exp) {
-    if (fabs(coef) < 0) return; // 忽略 0 係數
+    if (fabs(coef) < 0) return; 
 
-    // 檢查是否已存在相同指數
+
     for (auto it = termArray.begin(); it != termArray.end(); ++it) {
         if (it->exp == exp) {
             it->coef += coef;
@@ -93,14 +89,12 @@ void Polynomial::newTerm(float coef, int exp) {
         }
     }
 
-    // 插入新項（保持降冪排序）
-    Term newTerm{ exp, coef }; // ✅ 現在可正確使用聚合初始化
+    Term newTerm{ exp, coef };
     termArray.push_back(newTerm);
     sort(termArray.begin(), termArray.end(),
         [](const Term& a, const Term& b) { return a.exp > b.exp; });
 }
 
-// ---------------- 加法 ----------------
 Polynomial Polynomial::Add(const Polynomial& b) const {
     Polynomial c;
     size_t aPos = 0, bPos = 0;
@@ -122,7 +116,6 @@ Polynomial Polynomial::Add(const Polynomial& b) const {
         }
     }
 
-    // 把剩下的項目加入結果
     while (aPos < termArray.size()) {
         c.newTerm(termArray[aPos].coef, termArray[aPos].exp);
         aPos++;
@@ -135,7 +128,6 @@ Polynomial Polynomial::Add(const Polynomial& b) const {
     return c;
 }
 
-// ---------------- 乘法 ----------------
 Polynomial Polynomial::Mult(const Polynomial& b) const {
     Polynomial result;
     for (const auto& termA : termArray)
@@ -144,15 +136,12 @@ Polynomial Polynomial::Mult(const Polynomial& b) const {
     return result;
 }
 
-// ---------------- 代入計算 ----------------
 float Polynomial::Eval(float x) const {
     float result = 0;
     for (const auto& t : termArray)
         result += t.coef * pow(x, t.exp);
     return result;
 }
-
-// ---------------- 主程式 ----------------
 int main() {
     Polynomial p1, p2, sum, product;
 
@@ -177,6 +166,7 @@ int main() {
 
     return 0;
 }
+
 ```
 ## 效能分析
 | 函式                  | 時間複雜度    | 空間複雜度    |
