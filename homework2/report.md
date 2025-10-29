@@ -76,14 +76,14 @@ ostream& operator<<(ostream& os, const Polynomial& poly) {
     return os;
 }
 
-void Polynomial::newTerm(float coef, int exp) {
+void Polynomial::newTerm(float coef, int exp) {//插入新輸入，並將相同次方項合併
     if (fabs(coef) < 0) return; 
 
 
     for (auto it = termArray.begin(); it != termArray.end(); ++it) {
-        if (it->exp == exp) {
+        if (it->exp == exp) {//相同合併
             it->coef += coef;
-            if (fabs(it->coef) < 0)
+            if (fabs(it->coef) < 0)//係數為0的話刪除次方項
                 termArray.erase(it);
             return;
         }
@@ -92,10 +92,10 @@ void Polynomial::newTerm(float coef, int exp) {
     Term newTerm{ exp, coef };
     termArray.push_back(newTerm);
     sort(termArray.begin(), termArray.end(),
-        [](const Term& a, const Term& b) { return a.exp > b.exp; });
+        [](const Term& a, const Term& b) { return a.exp > b.exp; });//由大排到小
 }
 
-Polynomial Polynomial::Add(const Polynomial& b) const {
+Polynomial Polynomial::Add(const Polynomial& b) const {//多項式相加
     Polynomial c;
     size_t aPos = 0, bPos = 0;
 
@@ -128,15 +128,15 @@ Polynomial Polynomial::Add(const Polynomial& b) const {
     return c;
 }
 
-Polynomial Polynomial::Mult(const Polynomial& b) const {
+Polynomial Polynomial::Mult(const Polynomial& b) const {//多項式相乘
     Polynomial result;
-    for (const auto& termA : termArray)
+    for (const auto& termA : termArray)//用雙重迴圈來做交叉相乘
         for (const auto& termB : b.termArray)
             result.newTerm(termA.coef * termB.coef, termA.exp + termB.exp);
     return result;
 }
 
-float Polynomial::Eval(float x) const {
+float Polynomial::Eval(float x) const {//代入並計算值
     float result = 0;
     for (const auto& t : termArray)
         result += t.coef * pow(x, t.exp);
