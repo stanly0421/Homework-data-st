@@ -21,8 +21,6 @@
 #include <vector>
 #include <stdexcept>
 using namespace std;
-
-// Abstract class: Min Priority Queue
 template <class T>
 class MinPQ {
 public:
@@ -32,17 +30,15 @@ public:
     virtual void Push(const T&) = 0;
     virtual void Pop() = 0;
 };
-
-// Concrete class: MinHeap (1-based indexing)
 template <class T>
 class MinHeap : public MinPQ<T> {
 private:
-    vector<T> heap; // heap[0] unused, root at heap[1]
-
+    vector<T> heap;
     void HeapifyUp(int index) {
         while (index > 1) {
             int parent = index / 2;
-            if (heap[index] < heap[parent]) {
+            if (heap[index] < heap[parent])
+            {
                 swap(heap[index], heap[parent]);
                 index = parent;
             }
@@ -72,7 +68,7 @@ private:
 
 public:
     MinHeap() {
-        heap.push_back(T()); // dummy element at index 0
+        heap.push_back(T());
     }
 
     bool IsEmpty() const override {
@@ -103,22 +99,20 @@ public:
         cout << endl;
     }
 };
-
-// Test program
 int main() {
     MinHeap<int> pq;
     int n;
-    cout << "Enter number of elements: ";
+    cout << "elements:";
     cin >> n;
 
-    cout << "Enter " << n << " integers:" << endl;
+    cout << "input " << n << " int:" << endl;
     for (int i = 0; i < n; i++) {
         int x;
         cin >> x;
         pq.Push(x);
     }
 
-    cout << "Heap array representation (1-based):" << endl;
+    cout << "output:" << endl;
     pq.PrintHeap();
 
     return 0;
@@ -214,22 +208,16 @@ struct Node {
     Node* right;
     Node(int k) : key(k), left(nullptr), right(nullptr) {}
 };
-
-// 插入節點
 Node* insert(Node* root, int key) {
     if (!root) return new Node(key);
     if (key < root->key) root->left = insert(root->left, key);
     else if (key > root->key) root->right = insert(root->right, key);
     return root;
 }
-
-// 計算高度
 int height(Node* root) {
     if (!root) return 0;
     return 1 + max(height(root->left), height(root->right));
 }
-
-// 刪除節點
 Node* deleteNode(Node* root, int key) {
     if (!root) return nullptr;
     if (key < root->key) {
@@ -239,7 +227,6 @@ Node* deleteNode(Node* root, int key) {
         root->right = deleteNode(root->right, key);
     }
     else {
-        // 找到要刪除的節點
         if (!root->left) {
             Node* temp = root->right;
             delete root;
@@ -251,7 +238,6 @@ Node* deleteNode(Node* root, int key) {
             return temp;
         }
         else {
-            // 找右子樹最小值替代
             Node* succ = root->right;
             while (succ->left) succ = succ->left;
             root->key = succ->key;
@@ -260,8 +246,6 @@ Node* deleteNode(Node* root, int key) {
     }
     return root;
 }
-
-// 測試 (a)
 void experiment() {
     srand(static_cast<unsigned int>(time(0)));
     vector<int> ns = { 100, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000 };
@@ -279,8 +263,6 @@ void experiment() {
 
 int main() {
     experiment();
-
-    // 測試 (b)
     Node* root = nullptr;
     root = insert(root, 50);
     root = insert(root, 30);
